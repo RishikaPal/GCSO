@@ -1,16 +1,7 @@
 
 var car , wall ;
 var speed , weight ;
-
-
-function Setup() {
-    createCanvas(1600,400);
-
-    
-    var car , wall ;
-    var speed , weight ;
-    
-    
+   
     function Setup() {
         createCanvas(1600,400);
     
@@ -52,5 +43,4 @@ function Setup() {
     
     drawSprites();
     
-}
 }
