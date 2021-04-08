@@ -1,46 +1,76 @@
+var helicopterIMG, helicopterSprite, packageSprite,packageIMG;
+var packageBody,ground
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Body = Matter.Body;
 
-var car , wall ;
-var speed , weight ;
-   
-    function setup() {
-        createCanvas(1600,400);
-    
-        car = createSprite(50,200,50,50);
-        car.shapeColor=color(255);
+function preload()
+{
+	helicopterIMG=loadImage("helicopter.png")
+	packageIMG=loadImage("package.png")
+}
 
-        wall = createSprite(1200,200,60,100);
-        wall.shapeColor=color(80,80,80)
-    
-    
-        speed = random(55,90);
-        weight = random(400,1500);
-    
-        car.velocityX = speed ;
-    
-    
-    }
-    
-    function draw() {
-    
-        background(0);
-    
-        if(wall.x-car.x <(car.width+wall.width)/2){
-            car.velocityX=0;
-            var deformation=0.5 * weight * speed* speed/22500; 
-            if(deformation>180){
-                car.shapecolour="red";
-            }
-            if(deformation<180 && deformation>100){
-           car.shapecolour="yellow";
-        }
-        if(deformation<100){
-            car.shapecolour="green";
-        }
+function setup() {
+	createCanvas(800, 700);
+	rectMode(CENTER);
+	
 
-        
+	packageSprite=createSprite(width/2, 80, 10,10);
+	packageSprite.addImage(packageIMG)
+	packageSprite.scale=0.2
 
-    }
+	helicopterSprite=createSprite(width/2, 200, 10,10);
+	helicopterSprite.addImage(helicopterIMG)
+	helicopterSprite.scale=0.6
+
+	groundSprite=createSprite(width/2, height-35, width,10);
+	groundSprite.shapeColor=color(255)
+
+
+	engine = Engine.create();
+	world = engine.world;
+
+	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:0.3, isStatic:true});
+	World.add(world, packageBody);
+	
+
+	//Create a Ground
+	ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
+ 	World.add(world, ground);
+	Engine.run(engine);
+  
+}
+
+
+function draw() {
+  rectMode(CENTER);
+  background(0);
+ 
+  packageSprite.x= packageBody.position.x 
+  packageSprite.y= packageBody.position.y 
+  packageSprite.visible=true
+  drawSprites();
+  
+ 
+}
+
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+
+    helicopterSprite.x=helicopterSprite.x-20;    
+    translation={x:-20,y:0}
+  //  Matter.Body.translate(packageBody, translation)
+
+
+  } else if (keyCode === RIGHT_ARROW) {
+    helicopterSprite.x=helicopterSprite.x+20;
+    translation={x:20,y:0}
+   // Matter.Body.translate(packageBody, translation)
+  }
+  else if (keyCode === DOWN_ARROW) {
+	
+    Matter.Body.setStatic(packageBody,false);
     
-    drawSprites();
-    
+  }
 }
